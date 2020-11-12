@@ -57,6 +57,7 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
     private VocabularyProvider vocabularyProvider;
     public Vocabulary vocabulary;
     private Label scoreLabel;
+    private Label userLanguagesLabel;
 
     @Override
     public void create() {
@@ -64,6 +65,8 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
         batch = new SpriteBatch();
         score = 0;
         scoreLabel = new Label(Color.WHITE);
+        userLanguagesLabel = new Label( String.format("Pratique de %s en %s", VocabularyProvider.getInstance().getLanguage(VocabularyProvider.getInstance().getLanguage1()), VocabularyProvider.getInstance().getLanguage(VocabularyProvider.getInstance().getLanguageWantToLearn())),
+                                        Color.BLACK, 3);
 
         background = new Texture(Gdx.files.internal("background.jpg"));
         vocabularyProvider = vocabularyProvider.getInstance();
@@ -147,6 +150,7 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
             bubble.draw(batch);
         }
         scoreLabel.draw(batch, scoreButton.getX() - scoreLabel.getWidth() - 50, WORLD_HEIGHT - scoreLabel.getHeight() - 25);
+        userLanguagesLabel.draw(batch, 20, WORLD_HEIGHT - scenery.panel.getHeight() - 10);
         scenery.panel.draw(batch); // I can't understand why this not works on scenery.draw(batch) ....
         batch.end();
     }

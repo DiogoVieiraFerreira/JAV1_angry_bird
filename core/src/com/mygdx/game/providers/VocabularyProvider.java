@@ -610,6 +610,10 @@ public class VocabularyProvider {
         return languages;
     }
 
+    public String getLanguage(Language language) {
+        return languages.get(language);
+    }
+
     /**
      * Language used to show the word to find
      * @param language

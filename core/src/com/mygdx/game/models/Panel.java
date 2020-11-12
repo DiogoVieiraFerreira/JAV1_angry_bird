@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.providers.VocabularyProvider;
 
 public class Panel extends TextualObject {
     private static final String PICNAME = "panel.png";
@@ -14,7 +15,7 @@ public class Panel extends TextualObject {
     protected static GlyphLayout glyphLayout;
     protected BitmapFont font;
 
-    public Panel(Vector2 position, Word word) {
+    public Panel(Vector2 position, SemanticWord word) {
         super(PICNAME, position, WIDTH, HEIGHT);
         this.word = word;
         setY(getY()-getHeight());
@@ -22,7 +23,7 @@ public class Panel extends TextualObject {
         font = new BitmapFont();
         font.setColor(Color.BLACK);
         font.getData().setScale(3);
-        glyphLayout = new GlyphLayout(font, word.getEnglishWord());
+        glyphLayout = new GlyphLayout(font, word.getValue(VocabularyProvider.getInstance().getLanguage1()));
 
         setSize(glyphLayout.width * 2, HEIGHT);
     }

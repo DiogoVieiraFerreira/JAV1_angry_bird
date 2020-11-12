@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class VocabularyProvider {
+    private Language language1;// Language used to show the word to find
+    private Language languageWantToLearn; // Language user want to learn
     static VocabularyProvider singleInstance = null;
     public ArrayList<Vocabulary> vocabularies;
     private Map<Language, String> languages;
@@ -42,7 +44,7 @@ public class VocabularyProvider {
         Vocabulary vocabulary;
         do{
             vocabulary = vocabularies.get(MathUtils.random(0, vocabularies.size() - 1));
-        }while (vocabulary.countUnFoundWords() == 0);
+        }while (vocabulary.countUnFoundSemanticWord() == 0); // we want a voc with unfound words
         return vocabulary;
     }
     
@@ -607,4 +609,29 @@ public class VocabularyProvider {
     public Map<Language, String> getLanguages() {
         return languages;
     }
+
+    /**
+     * Language used to show the word to find
+     * @param language
+     */
+    public void setLanguage1(Language language) {
+        language1 = language;
+    }
+
+    public Language getLanguage1() {
+        return language1;
+    }
+
+    /**
+     * Language user want to learn
+     * @param language
+     */
+    public void setLanguageWantToLearn(Language language) {
+        languageWantToLearn = language;
+    }
+
+    public Language getLanguageWantToLearn() {
+        return languageWantToLearn;
+    }
+
 }

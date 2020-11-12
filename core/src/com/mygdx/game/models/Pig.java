@@ -3,6 +3,7 @@ package com.mygdx.game.models;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.AngryBird;
 import com.mygdx.game.interfaces.Scoreable;
+import com.mygdx.game.providers.VocabularyProvider;
 import com.mygdx.game.screens.GameScreen;
 
 public class Pig extends TextualObject implements Scoreable {
@@ -16,7 +17,7 @@ public class Pig extends TextualObject implements Scoreable {
     }
 
     public String sayWord() {
-        return this.getWord().getFrenchWord();
+        return this.getWord().getValue(VocabularyProvider.getInstance().getLanguageWantToLearn());
     }
 
     @Override

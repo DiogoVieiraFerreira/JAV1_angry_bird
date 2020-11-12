@@ -34,20 +34,20 @@ public final class Scenery {
     public RubberBand rubberBandFront;
     private Texture slingshotBack;
     private Texture slingshotFront;
-    private Word wordToFind;
+    private SemanticWord wordToFind;
 
     private ArrayList<PhysicalObject> scene;
-    private ArrayList<Word> words = new ArrayList<Word>();
+    private ArrayList<SemanticWord> words = new ArrayList<>();
 
     public Scenery(Vocabulary vocabulary) {
 
-        this.scene = new ArrayList<PhysicalObject>();
+        this.scene = new ArrayList<>();
         this.vocabulary = vocabulary;
 
         bird = new Bird(BIRD_START);
         bird.setFrozen(true);
         wasp = new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 50));
-        wordToFind = vocabulary.pickUnFoundRandomWord();
+        wordToFind = vocabulary.pickUnFoundRandomSemanticWord();
         panel = new Panel(new Vector2(20, Y_MAX), wordToFind);
 
         generateFloor();
@@ -130,17 +130,15 @@ public final class Scenery {
 
     private void generatePigs(int quantity) {
         words.add(wordToFind);
-        Word word;
+        SemanticWord semanticWord;
         for (int i = 0; i < quantity-1; i++) {
-            do {
-                //get 4 extra words for the game, even if they have already been found
-                // If vocabulary has only one last word, player can continue to try to find the word
-                word = vocabulary.pickRandomWord();
-            }while (words.contains(word));
-            words.add(word);
-            word.allocated = true;
+            //get 4 extra words for the game, even if they have already been found
+            // If vocabulary has only one last word, player can continue to try to find the word
+            semanticWord = vocabulary.pickUnFoundRandomSemanticWord();
+            words.add(semanticWord);
+            semanticWord.allocated = true;
         }
-        vocabulary.unAllocateWord();
+        vocabulary.unAllocateSemanticWord();
 
         for (int i = 0; i < quantity; i++) {
             try {

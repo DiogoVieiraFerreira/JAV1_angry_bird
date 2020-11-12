@@ -1,6 +1,7 @@
 package com.mygdx.game.providers;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.mygdx.game.Tests.SemanticWordTest;
 import com.mygdx.game.enums.Language;
 import com.mygdx.game.models.SemanticWord;
 import com.mygdx.game.models.Vocabulary;
@@ -25,6 +26,7 @@ public class VocabularyProvider {
     }
 
     private VocabularyProvider() {
+        SemanticWordTest.addTranslationTest();
         vocabularies = new ArrayList<>();
         languages = new HashMap<>();
 

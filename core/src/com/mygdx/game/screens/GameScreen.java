@@ -87,7 +87,7 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
     }
 
     public void newScene() {
-        if (vocabulary.countUnFoundWords() == 0)
+        if (vocabulary.countUnFoundSemanticWord() == 0)
             vocabulary = vocabularyProvider.pickRandomVocabulary();
 
         scenery = new Scenery(vocabulary);
@@ -99,7 +99,7 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
         }
         bird = scenery.bird;
         wasp = scenery.wasp;
-        bubble = new Bubble(new Vector2(-Bubble.WIDTH, 0), vocabulary.pickRandomWord(), 0);
+        bubble = new Bubble(new Vector2(-Bubble.WIDTH, 0), vocabulary.pickRandomSemanticWord(), 0);
         bubbleTime = 2;
     }
 
@@ -124,8 +124,8 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
     public void calculateScore(PhysicalObject object) {
         if (Pig.class.equals(object.getClass())) {
             Pig pig = (Pig) object;
-            if (pig.getWord().getEnglishWord() == scenery.panel.getWord().getEnglishWord()) {
-                vocabulary.findWord(scenery.panel.getWord()).found = true;
+            if (pig.getWord() == scenery.panel.getWord()) {
+                vocabulary.findSemanticWord(scenery.panel.getWord()).found = true;
                 score += pig.incrementScore();
                 newScene();
                 return;
@@ -185,7 +185,7 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
         } else if (Bird.class.equals(object.getClass())) {
             bird.isDragged = true;
         } else if (Panel.class.equals(object.getClass())) {
-            Gdx.app.log("GameScreen", ((Panel) object).getWord().getEnglishWord());
+            Gdx.app.log("GameScreen", ((Panel) object).getWord().getValue(VocabularyProvider.getInstance().getLanguage1()));
         } else if (Button.class.equals(object.getClass())) {
             manageButtons((Button) object);
         }

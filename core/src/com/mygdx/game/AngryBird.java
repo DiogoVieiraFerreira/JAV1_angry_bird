@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.mygdx.game.enums.ScreenName;
 import com.mygdx.game.screens.EndScreen;
 import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.screens.PauseScreen;
@@ -17,15 +18,8 @@ public class AngryBird extends Game {
 
     private static AngryBird instance;
     private Stack<ApplicationAdapter> stackScreens;
-    private HashMap<SCREENS_NAME, ApplicationAdapter> screens;
+    private HashMap<ScreenName, ApplicationAdapter> screens;
 
-    public enum SCREENS_NAME {
-        Welcome,
-        Game,
-        Pause,
-        Score,
-        End
-    }
 
     public static AngryBird getInstance() {
         return instance == null ? instance = new AngryBird() : instance;
@@ -35,15 +29,15 @@ public class AngryBird extends Game {
         screens = new HashMap<>();
         stackScreens = new Stack<>();
 
-        screens.put(SCREENS_NAME.Welcome, new WelcomeScreen());
-        screens.put(SCREENS_NAME.Game, new GameScreen());
-        screens.put(SCREENS_NAME.Pause, new PauseScreen());
-        screens.put(SCREENS_NAME.Score, new ScoreScreen((GameScreen) screens.get(SCREENS_NAME.Game)));
-        screens.put(SCREENS_NAME.End, new EndScreen());
+        screens.put(ScreenName.Welcome, new WelcomeScreen());
+        screens.put(ScreenName.Game, new GameScreen());
+        screens.put(ScreenName.Pause, new PauseScreen());
+        screens.put(ScreenName.Score, new ScoreScreen((GameScreen) screens.get(ScreenName.Game)));
+        screens.put(ScreenName.End, new EndScreen());
     }
 
-    public void push(SCREENS_NAME screen_name) {
-        ApplicationAdapter screen = screens.get(screen_name);
+    public void push(ScreenName screenName) {
+        ApplicationAdapter screen = screens.get(screenName);
         screen.create();
         stackScreens.push(screen);
         Gdx.input.setInputProcessor((InputProcessor) stackScreens.peek());
@@ -61,7 +55,7 @@ public class AngryBird extends Game {
     }
     @Override
     public void create() {
-        push(SCREENS_NAME.Welcome);
+        push(ScreenName.Welcome);
     }
 
     @Override

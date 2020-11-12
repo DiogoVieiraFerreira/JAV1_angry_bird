@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.game.AngryBird;
+import com.mygdx.game.enums.ScreenName;
 import com.mygdx.game.interfaces.Scoreable;
 import com.mygdx.game.models.Bird;
 import com.mygdx.game.models.Bubble;
@@ -110,7 +111,7 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
         if (scenery.isOutOfScenery(bird)) {
             bird.reset();
         } else if (bird.overlaps(wasp)) {
-            AngryBird.getInstance().push(AngryBird.SCREENS_NAME.End);
+            AngryBird.getInstance().push(ScreenName.End);
         } else if (scenery.overlaps(bird) != null) {
             PhysicalObject touchedObject = scenery.overlaps(bird);
             calculateScore(touchedObject);
@@ -195,11 +196,11 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
         switch (button.getName()) {
             case "score":
                 Gdx.app.log("GameScreen", "score touched");
-                AngryBird.getInstance().push(AngryBird.SCREENS_NAME.Score);
+                AngryBird.getInstance().push(ScreenName.Score);
                 break;
             case "pause":
                 pause = !pause;
-                AngryBird.getInstance().push(AngryBird.SCREENS_NAME.Pause);
+                AngryBird.getInstance().push(ScreenName.Pause);
                 Gdx.app.log("GameScreen", "pause touched");
                 break;
             default:

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.AngryBird;
+import com.mygdx.game.enums.ScreenName;
 
 public class WelcomeScreen extends ApplicationAdapter implements InputProcessor {
 
@@ -62,7 +63,7 @@ public class WelcomeScreen extends ApplicationAdapter implements InputProcessor 
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        AngryBird.getInstance().push(AngryBird.SCREENS_NAME.Game);
+        AngryBird.getInstance().push(ScreenName.Game);
         return true;
     }
 

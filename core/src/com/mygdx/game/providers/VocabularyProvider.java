@@ -606,7 +606,24 @@ public class VocabularyProvider {
         languages.put(Language.fr,"Français");
     }
 
-    public Map<Language, String> getLanguages() {
+    public Map<Language, String> getMapLanguages() {
+        return languages;
+    }
+
+    public Language findLanguage(String langue){
+        for ( Map.Entry<Language,String> language : this.languages.entrySet()){
+            if(language.getValue().equals(langue))
+                return language.getKey();
+        }
+        return null;
+    }
+    public ArrayList<String> getLanguages() {
+        ArrayList<String> languages = new ArrayList<>();
+
+        for ( Map.Entry<Language,String> language : this.languages.entrySet()){
+            languages.add(language.getValue());
+        }
+
         return languages;
     }
 

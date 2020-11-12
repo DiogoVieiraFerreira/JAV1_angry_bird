@@ -1,5 +1,6 @@
 package com.mygdx.game.models;
 
+import com.mygdx.game.Tests.SemanticWordTest;
 import com.mygdx.game.enums.Language;
 
 import java.util.HashMap;

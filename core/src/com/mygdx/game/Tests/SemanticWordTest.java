@@ -1,4 +1,4 @@
-package com.mygdx.game.providers;
+package com.mygdx.game.Tests;
 
 import com.badlogic.gdx.Gdx;
 import com.mygdx.game.enums.Language;

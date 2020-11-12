@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class TextualObject extends PhysicalObject {
     protected SemanticWord word;
 
-    public TextualObject(String picname, Vector2 position, int width, int height) {
+    public TextualObject(String picname, Vector2 position, float width, float height) {
         super( picname, position, width, height);
         setOrigin(position.x, position.y);
     }

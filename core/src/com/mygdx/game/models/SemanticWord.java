@@ -20,7 +20,7 @@ public class SemanticWord {
         values.put(language, value);
     }
 
-    public String getValues(Language language) {
+    public String getValue(Language language) {
         return values.get(language);
     }
 }

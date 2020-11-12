@@ -14,12 +14,12 @@ public class Vocabulary {
         words = new ArrayList<>();
     }
 
-    public ArrayList<SemanticWord> getWords() {
+    public ArrayList<SemanticWord> getSemanticWords() {
         Gdx.app.log("PIGGY", String.valueOf(words.size()));
         return words;
     }
 
-    public SemanticWord findWord(SemanticWord wordToFind)
+    public SemanticWord findSemanticWord(SemanticWord wordToFind)
     {
         for (SemanticWord word : words)
             if (word == wordToFind)
@@ -30,17 +30,17 @@ public class Vocabulary {
     public void  addSemanticWord(SemanticWord word){
         words.add(word);
     }
-    public  SemanticWord pickRandomWord(){
+    public  SemanticWord pickRandomSemanticWord(){
         return  words.get(MathUtils.random(0,words.size()-1));
     }
-    public SemanticWord pickUnFoundRandomWord(){
+    public SemanticWord pickUnFoundRandomSemanticWord(){
         SemanticWord word;
         do {
             word = words.get(MathUtils.random(0,words.size()-1));
         } while (word.found);
         return word;
     }
-    public int countUnFoundWords(){
+    public int countUnFoundSemanticWord(){
         int i = 0;
         for (SemanticWord word : words) {
             if(word.found == false)
@@ -49,7 +49,7 @@ public class Vocabulary {
         return i;
     }
 
-    public void unAllocateWord() {
+    public void unAllocateSemanticWord() {
         for(SemanticWord w: words){
             w.allocated = false;
         }

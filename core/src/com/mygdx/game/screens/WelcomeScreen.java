@@ -8,10 +8,16 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.AngryBird;
 import com.mygdx.game.enums.Language;
 import com.mygdx.game.enums.ScreenName;
+import com.mygdx.game.models.Button;
+import com.mygdx.game.models.Label;
 import com.mygdx.game.providers.VocabularyProvider;
+
+import java.util.ArrayList;
 
 public class WelcomeScreen extends ApplicationAdapter implements InputProcessor {
 
@@ -19,10 +25,18 @@ public class WelcomeScreen extends ApplicationAdapter implements InputProcessor 
     private OrthographicCamera camera;
     private SpriteBatch batch;
 
-    private BitmapFont title;
+    private String LanguageToLearn;
+    private String LanguageToShowText;
+
+    private Label titleLabel;
+    private Label informationLabel;
+
+    private ArrayList<Button> buttons;
+    private ArrayList<Label> buttonsLabel;
 
     public static final int WORLD_WIDTH = 1600;
     public static final int WORLD_HEIGHT = 900;
+
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -30,22 +44,65 @@ public class WelcomeScreen extends ApplicationAdapter implements InputProcessor 
         camera.setToOrtho(false, WORLD_WIDTH, WORLD_HEIGHT);
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
         camera.update();
+
         background = new Texture(Gdx.files.internal("background.jpg"));
 
-        title = new BitmapFont();
-        title.setColor(Color.ROYAL);
-        title.getData().setScale(6);
+        titleLabel = new Label("Angry Wirds", Color.BLACK, 6);
+        informationLabel = new Label(Color.BLACK);
+
+        LanguageToShowText = VocabularyProvider.getInstance().getLanguage(VocabularyProvider.getInstance().getLanguage1());
+        LanguageToLearn = VocabularyProvider.getInstance().getLanguage(VocabularyProvider.getInstance().getLanguageWantToLearn());
 
         Gdx.input.setInputProcessor(this);
     }
 
+    public void update() {
+        informationLabel.setText(String.format("Exercice de %s en %s", LanguageToShowText != null ? LanguageToShowText : "Choisir", LanguageToLearn != null ? LanguageToLearn : "Choisir"));
+        placeButtons();
+    }
+
     @Override
     public void render() {
+        update();
         batch.begin();
         batch.setProjectionMatrix(camera.combined);
         batch.draw(background, 0, 0, camera.viewportWidth, camera.viewportHeight);
-        title.draw(batch, "Welcome", WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
+        titleLabel.draw(batch, camera.viewportWidth / 2 - titleLabel.getWidth() / 2, WORLD_HEIGHT - titleLabel.getHeight());
+        informationLabel.draw(batch, camera.viewportWidth / 2 - informationLabel.getWidth() / 2, WORLD_HEIGHT - titleLabel.getHeight() * 2 - informationLabel.getHeight() - 10);
+        for (Button button : buttons)
+            button.draw(batch);
+        for (Label label : buttonsLabel)
+            label.draw(batch, label.getPosition().x, label.getPosition().y);
+
         batch.end();
+    }
+
+    private void placeButtons() {
+        ArrayList<String> languages = VocabularyProvider.getInstance().getLanguages();
+        buttons = buttons == null  ? new ArrayList() : buttons;
+        buttonsLabel = buttonsLabel == null  ? new ArrayList() : buttonsLabel;
+        if(LanguageToShowText == null) {
+            for ( int i = 0; i < languages.size()-1 ; i++) {
+                Label label = new Label(languages.get(i), Color.BLACK, 3);
+                Button button = new Button("button_flat.png", "Left_" + languages.get(i), new Vector2(50, 0), 400, 100);
+                button.setY(WORLD_HEIGHT - 400 - button.getHeight() * i - 20 * i);
+                label.setPosition(button.getX() + 20, button.getY() + button.getHeight() / 2);
+                buttons.add(button);
+                buttonsLabel.add(label);
+                i++;
+            }
+        }
+        if(LanguageToLearn == null) {
+            for ( int i = 0; i < languages.size()-1 ; i++) {
+                Label label = new Label(languages.get(i), Color.BLACK, 3);
+                Button button = new Button("button_flat.png", "right_" + languages.get(i), new Vector2(50 + 450 * 2, 0), 400, 100);
+                button.setY(WORLD_HEIGHT - 400 - button.getHeight() * i - 20 * i);
+                label.setPosition(button.getX() + 20, button.getY() + button.getHeight() / 2);
+                buttons.add(button);
+                buttonsLabel.add(label);
+            }
+        }
+
     }
 
     @Override
@@ -65,9 +122,21 @@ public class WelcomeScreen extends ApplicationAdapter implements InputProcessor 
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        VocabularyProvider.getInstance().setLanguage1(Language.fr);
-        VocabularyProvider.getInstance().setLanguageWantToLearn(Language.en);
-        AngryBird.getInstance().push(ScreenName.Game);
+
+        for(Button myButton : buttons) {
+            if (myButton.getBoundingRectangle().contains(new Circle(screenX, screenY, 1)))
+            {
+                String langue = myButton.getName().substring(myButton.getName().indexOf("_"));
+                if(myButton.getName().startsWith("left_"))
+                    VocabularyProvider.getInstance().setLanguage1(VocabularyProvider.getInstance().findLanguage(langue));
+                else if(myButton.getName().startsWith("left_"))
+                    VocabularyProvider.getInstance().setLanguage1(VocabularyProvider.getInstance().findLanguage(langue));
+            }
+        }
+
+//        VocabularyProvider.getInstance().setLanguage1(Language.fr);
+//        VocabularyProvider.getInstance().setLanguageWantToLearn(Language.en);
+//        AngryBird.getInstance().push(ScreenName.Game);
         return true;
     }
 

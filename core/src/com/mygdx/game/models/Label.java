@@ -17,17 +17,20 @@ public class Label {
     private float y;
 
     public Label(Color color) {
-        font = new BitmapFont();
-        font.setColor(color);
-        font.getData().setScale(4);
-        glyphLayout = new GlyphLayout();
+        this("", color, 4);
     }
 
     public Label(String text, Color color){
-        this(color);
-        setText(text);
+        this(text, color, 4);
     }
 
+    public Label(String text, Color color, int size){
+        font = new BitmapFont();
+        font.setColor(color);
+        font.getData().setScale(size);
+        glyphLayout = new GlyphLayout();
+        setText(text);
+    }
     public void setText(String text){
         glyphLayout.setText(font, text);
     }

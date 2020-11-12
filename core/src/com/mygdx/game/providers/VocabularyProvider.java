@@ -27,6 +27,7 @@ public class VocabularyProvider {
 
     private VocabularyProvider() {
         SemanticWordTest.addTranslationTest();
+        SemanticWordTest.getValueTest();
         vocabularies = new ArrayList<>();
         languages = new HashMap<>();
 

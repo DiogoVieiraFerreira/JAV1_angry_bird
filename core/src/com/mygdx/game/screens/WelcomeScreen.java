@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.AngryBird;
 import com.mygdx.game.enums.Language;
 import com.mygdx.game.enums.ScreenName;
@@ -25,8 +26,8 @@ public class WelcomeScreen extends ApplicationAdapter implements InputProcessor 
     private OrthographicCamera camera;
     private SpriteBatch batch;
 
-    private String LanguageToLearn;
-    private String LanguageToShowText;
+    private Language LanguageToLearn;
+    private Language LanguageToShowText;
 
     private Label titleLabel;
     private Label informationLabel;
@@ -50,14 +51,14 @@ public class WelcomeScreen extends ApplicationAdapter implements InputProcessor 
         titleLabel = new Label("Angry Wirds", Color.BLACK, 6);
         informationLabel = new Label(Color.BLACK);
 
-        LanguageToShowText = VocabularyProvider.getInstance().getLanguage(VocabularyProvider.getInstance().getLanguage1());
-        LanguageToLearn = VocabularyProvider.getInstance().getLanguage(VocabularyProvider.getInstance().getLanguageWantToLearn());
+        LanguageToShowText = VocabularyProvider.getInstance().getLanguage1();
+        LanguageToLearn = VocabularyProvider.getInstance().getLanguageWantToLearn();
 
         Gdx.input.setInputProcessor(this);
     }
 
     public void update() {
-        informationLabel.setText(String.format("Exercice de %s en %s", LanguageToShowText != null ? LanguageToShowText : "Choisir", LanguageToLearn != null ? LanguageToLearn : "Choisir"));
+        informationLabel.setText(String.format("Exercice de %s en %s", LanguageToShowText != null ? VocabularyProvider.getInstance().getLanguage(LanguageToShowText) : "Choisir", LanguageToLearn != null ? VocabularyProvider.getInstance().getLanguage(LanguageToLearn) : "Choisir"));
         placeButtons();
     }
 
@@ -79,21 +80,20 @@ public class WelcomeScreen extends ApplicationAdapter implements InputProcessor 
 
     private void placeButtons() {
         ArrayList<String> languages = VocabularyProvider.getInstance().getLanguages();
-        buttons = buttons == null  ? new ArrayList() : buttons;
-        buttonsLabel = buttonsLabel == null  ? new ArrayList() : buttonsLabel;
-        if(LanguageToShowText == null) {
-            for ( int i = 0; i < languages.size()-1 ; i++) {
+        buttons = new ArrayList();
+        buttonsLabel = new ArrayList();
+        if (LanguageToShowText == null) {
+            for (int i = 0; i < languages.size(); i++) {
                 Label label = new Label(languages.get(i), Color.BLACK, 3);
-                Button button = new Button("button_flat.png", "Left_" + languages.get(i), new Vector2(50, 0), 400, 100);
+                Button button = new Button("button_flat.png", "left_" + languages.get(i), new Vector2(50, 0), 400, 100);
                 button.setY(WORLD_HEIGHT - 400 - button.getHeight() * i - 20 * i);
                 label.setPosition(button.getX() + 20, button.getY() + button.getHeight() / 2);
                 buttons.add(button);
                 buttonsLabel.add(label);
-                i++;
             }
         }
-        if(LanguageToLearn == null) {
-            for ( int i = 0; i < languages.size()-1 ; i++) {
+        if (LanguageToLearn == null) {
+            for (int i = 0; i < languages.size(); i++) {
                 Label label = new Label(languages.get(i), Color.BLACK, 3);
                 Button button = new Button("button_flat.png", "right_" + languages.get(i), new Vector2(50 + 450 * 2, 0), 400, 100);
                 button.setY(WORLD_HEIGHT - 400 - button.getHeight() * i - 20 * i);
@@ -101,6 +101,17 @@ public class WelcomeScreen extends ApplicationAdapter implements InputProcessor 
                 buttons.add(button);
                 buttonsLabel.add(label);
             }
+        }
+        if (LanguageToLearn != null && LanguageToShowText != null) {
+            Label label = new Label("Jouer !!", Color.BLACK, 3);
+            Button button = new Button("button_flat.png", "game", Vector2.Zero, 400, 100);
+            button.setPosition(
+                    WORLD_WIDTH / 2 - button.getWidth() / 2,
+                    WORLD_HEIGHT - 400 - button.getHeight() * 2
+            );
+            label.setPosition(button.getX() + 20, button.getY() + button.getHeight() / 2);
+            buttons.add(button);
+            buttonsLabel.add(label);
         }
 
     }
@@ -122,21 +133,27 @@ public class WelcomeScreen extends ApplicationAdapter implements InputProcessor 
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        Vector3 actualPos = camera.unproject(new Vector3(screenX, screenY, 0));
 
-        for(Button myButton : buttons) {
-            if (myButton.getBoundingRectangle().contains(new Circle(screenX, screenY, 1)))
-            {
-                String langue = myButton.getName().substring(myButton.getName().indexOf("_"));
-                if(myButton.getName().startsWith("left_"))
-                    VocabularyProvider.getInstance().setLanguage1(VocabularyProvider.getInstance().findLanguage(langue));
-                else if(myButton.getName().startsWith("left_"))
-                    VocabularyProvider.getInstance().setLanguage1(VocabularyProvider.getInstance().findLanguage(langue));
+        for (Button myButton : buttons) {
+            if (myButton.getBoundingRectangle().contains(new Circle(actualPos.x, actualPos.y, 1))) {
+                String langue = myButton.getName().substring(myButton.getName().indexOf("_") + 1);
+                if (myButton.getName().startsWith("left_")) {
+                    Gdx.app.log("Langue", langue);
+                    LanguageToShowText = VocabularyProvider.getInstance().findLanguage(langue);
+
+                } else if (myButton.getName().startsWith("right_")) {
+                    Gdx.app.log("Langue", langue);
+                    LanguageToLearn = VocabularyProvider.getInstance().findLanguage(langue);
+                } else if (myButton.getName().equals("game"))
+                {
+                    VocabularyProvider.getInstance().setLanguage1(LanguageToShowText);
+                    VocabularyProvider.getInstance().setLanguageWantToLearn(LanguageToLearn);
+                    AngryBird.getInstance().push(ScreenName.Game);
+                }
             }
         }
 
-//        VocabularyProvider.getInstance().setLanguage1(Language.fr);
-//        VocabularyProvider.getInstance().setLanguageWantToLearn(Language.en);
-//        AngryBird.getInstance().push(ScreenName.Game);
         return true;
     }
 

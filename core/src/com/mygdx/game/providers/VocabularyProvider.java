@@ -8,10 +8,13 @@ import com.mygdx.game.models.Vocabulary;
 import com.mygdx.game.models.Word;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class VocabularyProvider {
     static VocabularyProvider singleInstance = null;
     public ArrayList<Vocabulary> vocabularies;
+    private Map<Language, String> languages;
 
     public static VocabularyProvider getInstance() {
         if (singleInstance == null)
@@ -21,11 +24,16 @@ public class VocabularyProvider {
 
     private VocabularyProvider() {
         vocabularies = new ArrayList<>();
+        languages = new HashMap<>();
+
+        createLanguages();
         createVocabularies();
     }
+
     public int totalOfVocabularies(){
         return vocabularies.size();
     }
+
     public Vocabulary pickVocabulary(int index) {
         return vocabularies.get(index);
     }
@@ -588,5 +596,15 @@ public class VocabularyProvider {
          vocabularies.add(vocabulary);
 
 
+    }
+
+    private void createLanguages(){
+        languages.put(Language.en,"Anglais");
+        languages.put(Language.es,"Espagnol");
+        languages.put(Language.fr,"Français");
+    }
+
+    public Map<Language, String> getLanguages() {
+        return languages;
     }
 }
